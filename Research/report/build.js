@@ -14,7 +14,9 @@ const { Document, Packer, Paragraph, TextRun, ImageRun, Table, TableRow, TableCe
 const OUT = path.join(os.homedir(), 'Documents', 'IntelliERP', '1-Final-Submission', 'IntelliERP-FYP-Report.docx');
 const ASSETS = path.join(__dirname, 'assets');
 const META = require('./src/meta');
-const TEXT_WIDTH = 9026; // A4 width 11906 minus 1-inch margins, in DXA
+// INTI FYP format: A4, left margin 1.5 inch (binding), top, right and bottom 1 inch
+const MARGIN = { top: 1440, bottom: 1440, left: 2160, right: 1440 };
+const TEXT_WIDTH = 11906 - MARGIN.left - MARGIN.right; // 8306 DXA = 5.77 inch
 const FONT = 'Arial';
 
 // ------------------------------------------------------------------ references
@@ -105,7 +107,7 @@ function pngSize(file) {
 function image(file, widthIn) {
   const full = path.join(ASSETS, file);
   const { w, h } = pngSize(full);
-  const width = Math.round(widthIn * 96), height = Math.round(width * h / w);
+  const width = Math.round(Math.min(widthIn, TEXT_WIDTH / 1440) * 96), height = Math.round(width * h / w);
   const maxH = 8.6 * 96;
   const scale = height > maxH ? maxH / height : 1;
   return new ImageRun({ type: 'png', data: fs.readFileSync(full), transformation: { width: Math.round(width * scale), height: Math.round(height * scale) } });
@@ -146,7 +148,7 @@ function render(block) {
   }
   // the first front-matter page already starts a new section, so it needs no page break of its own
   if (block.front) { const first = !render.frontSeen; render.frontSeen = true;
-    return [new Paragraph({ heading: HeadingLevel.HEADING_1, pageBreakBefore: !first, children: [new TextRun({ text: block.front, font: FONT })] })]; }
+    return [new Paragraph({ heading: HeadingLevel.HEADING_1, alignment: AlignmentType.CENTER, pageBreakBefore: !first, children: [new TextRun({ text: block.front.toUpperCase(), font: FONT })] })]; }
   if (block.h2) return [new Paragraph({ heading: HeadingLevel.HEADING_2, children: runs(block.h2) })];
   if (block.h3) return [new Paragraph({ heading: HeadingLevel.HEADING_3, children: runs(block.h3) })];
   if (block.p) return [para(block.p, block.line ? { spacing: { line: block.line } } : {})];  // `line`: tighter spacing (the abstract, to keep its keywords on its page)
@@ -190,21 +192,23 @@ function cover() {
       transformation: { width, height: Math.round(width * h / w) } })] });
   };
   const b = { style: BorderStyle.SINGLE, size: 6, color: '000000' };
-  const field = (label, value) => new Paragraph({ spacing: { after: 120 }, tabStops: [{ type: TabStopType.LEFT, position: 3000 }],
-    children: [new TextRun({ text: label, font: FONT, size: 24 }), new TextRun({ text: '\t: ' + value, font: FONT, size: 24 })] });
+  // label, then ': value' at a tab; a value that wraps continues under the value, not under the label
+  const field = (label, value) => new Paragraph({ spacing: { after: 50, line: 264 }, indent: { left: 2600, hanging: 2600 },
+    tabStops: [{ type: TabStopType.LEFT, position: 2600 }],
+    children: [new TextRun({ text: label, font: FONT, size: 22 }), new TextRun({ text: '\t: ' + value, font: FONT, size: 22 })] });
   return [
-    picture('inti-logo.png', 3.6, '[INTI International University logo]', 300),
-    c('FINAL YEAR PROJECT REPORT', 26, { after: 240 }),
+    picture('inti-logo.png', 3.2, '[INTI International University logo]', 160),
+    c('FINAL YEAR PROJECT REPORT', 26, { after: 160 }),
     new Table({ width: { size: TEXT_WIDTH, type: WidthType.DXA }, columnWidths: [TEXT_WIDTH], rows: [new TableRow({ children: [new TableCell({
       width: { size: TEXT_WIDTH, type: WidthType.DXA }, borders: box(b), margins: { top: 120, bottom: 120, left: 200, right: 200 },
       children: [c('PROJECT TITLE:', 28, { after: 100 }), c(META.title, 24, { after: 60 })] })] })] }),
-    c('', 12, { after: 200 }),
-    new Paragraph({ alignment: AlignmentType.JUSTIFIED, spacing: { after: 200, line: 340 }, children: [new TextRun({ font: FONT, size: 24,
+    c('', 12, { after: 120 }),
+    new Paragraph({ alignment: AlignmentType.JUSTIFIED, spacing: { after: 140, line: 300 }, children: [new TextRun({ font: FONT, size: 24,
       text: `"A dissertation submitted in partial fulfillment of the requirement of an Honours Degree in Computer Science at INTI International University under the management and supervision of the Faculty of Data Science and Information Technology."` })] }),
-    new Paragraph({ alignment: AlignmentType.JUSTIFIED, spacing: { after: 300, line: 340 }, children: [new TextRun({ font: FONT, size: 24, italics: true,
+    new Paragraph({ alignment: AlignmentType.JUSTIFIED, spacing: { after: 160, line: 300 }, children: [new TextRun({ font: FONT, size: 24, italics: true,
       text: `I declare that this project is my own work, it has not been copied in part or in whole from any source except where duly acknowledged. As such, all uses of previously published works (from books, journals, internet, etc.) have been properly acknowledged within the report to an item in the references or bibliographies. I hereby submit my dissertation, dated ${META.submissionDate} for review and assessment.` })] }),
-    c('by', 24, { after: 200 }),
-    picture('student-photo.png', 1.05, '[Student photograph]', 200),
+    c('by', 24, { after: 100 }),
+    picture('student-photo.png', 1.0, '[Student photograph]', 140),
     field('Student Name', META.student), field('Student ID', META.studentId), field('IC No / Passport No', META.passport),
     field('Project ID', META.projectId), field('Supervisor (INTI)', META.supervisor),
     field('Home Institution', META.home), field('Home Department', META.homeDepartment),
@@ -247,7 +251,7 @@ const headerFooter = {
       new TextRun({ children: [PageNumber.CURRENT], font: FONT, size: 20, bold: true }), new TextRun({ text: ' of ', font: FONT, size: 20 }),
       new TextRun({ children: [PageNumber.TOTAL_PAGES], font: FONT, size: 20, bold: true })] })] }) },
   footers: { default: new Footer({ children: [new Paragraph({ tabStops: [{ type: TabStopType.CENTER, position: TEXT_WIDTH / 2 }, { type: TabStopType.RIGHT, position: TEXT_WIDTH }],
-    children: [new TextRun({ text: `Prepared by ${META.student}`, font: FONT, size: 16 }), new TextRun({ text: `\t${META.programme}`, font: FONT, size: 16 }),
+    children: [new TextRun({ text: `Prepared By ${META.student}-${META.programme}-Project`, font: FONT, size: 16 }), new TextRun({ text: `\t${META.programme}`, font: FONT, size: 16 }),
       new TextRun({ text: `\t${META.session}`, font: FONT, size: 16 })] })] }) },
 };
 
@@ -275,13 +279,31 @@ const doc = new Document({
     ...[2, 3, 4, 5, 6, 7, 8, 9].map(n => ({ reference: `${NUMBERED}-s${n}`, levels: [{ level: 0, format: LevelFormat.DECIMAL, start: n, text: '%1.', alignment: AlignmentType.LEFT, style: { paragraph: { indent: { left: 720, hanging: 360 } } } }] })),
   ] },
   sections: [
-    { properties: { page: { margin: { top: 1440, bottom: 1440, left: 1440, right: 1440 } } }, children: cover() },
-    { properties: { page: { margin: { top: 1440, bottom: 1440, left: 1440, right: 1440, header: 700, footer: 600 } } }, ...headerFooter,
+    { properties: { page: { margin: { ...MARGIN, header: 700, footer: 600 } } }, ...headerFooter, children: cover() },
+    { properties: { page: { margin: { ...MARGIN, header: 700, footer: 600 } } }, ...headerFooter,
       children: [...body, ...refBlocks, ...appendices] },
   ],
 });
 
-Packer.toBuffer(doc).then(buf => {
+// The cover page is not hyphenated (as in the INTI template); docx-js has no option for this, so the cover's
+// paragraphs get <w:suppressAutoHyphens/> in the saved XML (the cover is everything before the first section break).
+function noHyphensOnCover(buf) {
+  const { unzipSync, zipSync, strFromU8, strToU8 } = require('fflate');
+  const files = unzipSync(new Uint8Array(buf));
+  const xml = strFromU8(files['word/document.xml']);
+  const cut = xml.indexOf('<w:sectPr');
+  // schema order: suppressAutoHyphens comes after pStyle, keepNext, tabs and the like, and before spacing, ind, jc and rPr
+  const cover = xml.slice(0, cut).replace(/<w:pPr>([\s\S]*?)<\/w:pPr>/g, (m, inner) => {
+    const at = inner.search(/<w:(kinsoku|wordWrap|overflowPunct|topLinePunct|autoSpaceDE|autoSpaceDN|bidi|adjustRightInd|snapToGrid|spacing|ind|contextualSpacing|mirrorIndents|suppressOverlap|jc|textDirection|textAlignment|textboxTightWrap|outlineLvl|divId|cnfStyle|rPr|sectPr|pPrChange)\b/);
+    const i = at < 0 ? inner.length : at;
+    return `<w:pPr>${inner.slice(0, i)}<w:suppressAutoHyphens/>${inner.slice(i)}</w:pPr>`;
+  });
+  files['word/document.xml'] = strToU8(cover + xml.slice(cut));
+  return Buffer.from(zipSync(files));
+}
+
+Packer.toBuffer(doc).then(raw => {
+  const buf = noHyphensOnCover(raw);
   fs.writeFileSync(OUT, buf);
   const missing = Object.keys(BIB).filter(k => !used.has(k));
   console.log(`written ${OUT} (${Math.round(buf.length / 1024)} KB); ${used.size} references cited, ${missing.length} in the bibliography not cited`);

@@ -65,8 +65,8 @@ module.exports = [
   { h2: '1.7 Research Methodology' },
   { p: 'The project follows a design-science approach [@hevner2004design]: an artefact (IntelliERP and TRACE) is built to address a practical problem, and its effect is measured with controlled experiments. Development was iterative, in nine phases, each of which was built, tested with automated tests and reviewed before the next started: (1) ERP foundation, (2) PostgreSQL persistence, (3) analytics, (4) LLM integration and tool calling, (5) enterprise grounding, (6) cross-module reasoning and proactive insights, (7) controlled actions, (8) evaluation and (9) typed run-time verification (TRACE). Results of the evaluation fed back into the design: five failures found in the first evaluation run led to five design changes, and the limits of the pattern-based checker led to TRACE. Chapter 3 describes the methodology in detail.' },
 
-  { p: 'Figure 1.1 shows the methodology as a cycle of six steps. Steps 1 to 3 define the problem and build the system; steps 4 to 6 test it, evaluate it and report the results, and what was learnt in testing and evaluation was fed back into the requirements and the design.' },
-  { fig: { file: 'fig-research-method.png', caption: 'Research methodology of the project (design science)', width: 6.3 } },
+  { p: 'Figure 1.1 shows the methodology as a cycle of six steps, with the results of testing and evaluation fed back into the requirements and the design.' },
+  { fig: { file: 'fig-research-method.png', caption: 'Research methodology of the project (design science)', width: 5.0 } },
 
   { h2: '1.8 Target Audience' },
   { h3: '1.8.1 Primary' },
