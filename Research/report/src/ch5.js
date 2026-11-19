@@ -5,6 +5,7 @@ module.exports = [
 
   { h2: '5.2 System Development Tools and Configuration' },
   { h3: '5.2.1 Technology stack' },
+  { p: 'Table 5.1 lists the technologies used in each layer of the system and the purpose each one serves.' },
   { table: { caption: 'System technology stack', widths: [1.8, 3.2, 4],
     head: ['Layer', 'Technologies', 'Purpose in the system'],
     rows: [
@@ -16,6 +17,7 @@ module.exports = [
       ['Evaluation', 'Python scripts in `LLM/evaluation`; MiniCheck (PyTorch, Transformers) on the CPU', 'Experiments of Chapter 6'],
     ] } },
   { h3: '5.2.2 Hardware and environment' },
+  { p: 'The system was developed and evaluated on a single laptop without a GPU. Table 5.2 gives its specification.' },
   { table: { caption: 'Development hardware and environment', widths: [2, 3, 4],
     head: ['Component', 'Specification', 'Purpose'],
     rows: [
@@ -29,12 +31,13 @@ module.exports = [
   { p: 'Two options were considered: a small local model or a cloud API. A small local model would keep data on the machine, but models that fit on a laptop are weak at tool calling and structured output, and the project\'s claims would then be about a weak model. The project therefore uses the Gemini API on its free tier, with `gemini-3.5-flash-lite` for all evaluation runs and the open-weight `gemma-4-31b-it` as a second model. The free tier limits requests per minute and per day and is often overloaded. The assistant was therefore built to wait out the per-minute limit and to move to a fallback model when one is overloaded, and every evaluation script records its progress so that it resumes where it stopped.' },
   { h3: '5.2.4 Architecture' },
   { p: 'Figure 5.1 shows the layered architecture. A request flows from a React page through an Axios service to a FastAPI router, a service, a repository interface and PostgreSQL. The repository interface has two implementations, PostgreSQL and in-memory, so the full test suite runs without a database.' },
-  { fig: { file: 'fig-architecture.png', caption: 'Layered architecture of IntelliERP', width: 6 } },
+  { fig: { file: 'fig-architecture.png', caption: 'Layered architecture of IntelliERP', width: 6.3 } },
 
   { h2: '5.3 Uniqueness of System 1: Deterministic Analytics with Evidence' },
   { h3: '5.3.1 Development Approach' },
   { p: 'Agents that decide on their own vary greatly between runs [@long2026reliability]. IntelliERP therefore lets rules, not the AI, decide what is at risk. The analytics are pure functions with no AI involved: average daily demand over 28 days and its trend against the previous 28 days; days of cover; the supplier\'s lead time observed from its deliveries; a four-level stockout risk; an order-up-to reorder quantity; weekly forecasts chosen by back-test error; supplier performance; and day-by-day what-if projections. Each result carries the facts that produced it.' },
   { h3: '5.3.2 Code Development' },
+  { p: 'Figure 5.2 shows the function that assigns the stockout risk level. The level is decided by fixed rules in a fixed order, and every condition that applies is written out as a line of evidence.' },
   { code: { caption: 'Stockout risk rule with its evidence', source: 'Backend/app/analytics/stock_risk.py', text:
 `def assess(position: StockPosition, today: date) -> StockRisk:
     p = position
@@ -90,6 +93,7 @@ module.exports = [
       ['draft_purchase_order', 'Creates a draft purchase order', 'procurement:create'],
     ] } },
   { h3: '5.4.2 Code Development' },
+  { p: 'Figure 5.3 shows how a tool call from the model is run. The permission is checked again on the server, and invalid inputs or business-rule errors are returned to the model as messages instead of failing the request.' },
   { code: { caption: 'Every tool call is checked against the user\'s permissions', source: 'Backend/app/llm/tools.py', text:
 `def run(self, user: User, name: str, arguments: Any) -> Any:
     self._user = user
@@ -111,6 +115,7 @@ module.exports = [
   { h3: '5.5.1 Development Approach' },
   { p: 'A general model does not know what "safety stock", "Low Stock" or "High risk" mean in this company. The knowledge base gives it 41 passages: 11 describing every table and column (generated from the database models), 11 definitions, 8 rules, 4 workflows, 4 role descriptions (generated from the permission map) and 3 data notes. Thresholds in the written passages are filled from the constants of the code that applies them, and a test fails if a database column has no description. For each question the four best-matching passages are retrieved with BM25 [@robertson2009bm25] and placed before the question; the model can also search the knowledge base itself.' },
   { h3: '5.5.2 Code Development' },
+  { p: 'Figure 5.4 shows the retrieval function. Each passage is scored with BM25 against the words of the question, and the best four are given to the model.' },
   { code: { caption: 'BM25 retrieval over the knowledge base', source: 'Backend/app/knowledge/base.py', text:
 `def search(self, query: str, limit: int = 4, category: str | None = None) -> list[Match]:
     """The entries most relevant to \`query\`, best first. Entries sharing no word with it are left out."""
@@ -162,7 +167,8 @@ module.exports = [
       ['Derived', 'Results the analytics compute', 'demand trend, days of cover, stockout risk level, reorder point, suggested quantity, forecast, what-if stockout date'],
       ['Policy', 'Executable rules and the permission map', 'rising-demand threshold, review period, drafts per message, what a role or the assistant may do'],
     ] } },
-  { fig: { file: 'fig-trace.png', caption: 'The TRACE verification pipeline', width: 6.4 } },
+  { p: 'Figure 5.5 shows the path a draft answer takes through TRACE, from extraction to the final verdict on each statement.' },
+  { fig: { file: 'fig-trace.png', caption: 'The TRACE verification pipeline', width: 6.3 } },
   { h3: '5.7.2 Code Development' },
   { p: 'The assertion schema is kept flat and small, because structured output is least reliable on deep schemas [@geng2025jsonschemabench]; every field the model does not have to fill is one it cannot get wrong.' },
   { code: { caption: 'The typed assertion schema (shortened)', source: 'Backend/app/llm/trace/schema.py', text:
@@ -221,6 +227,7 @@ class Assertion(BaseModel):
       ['Traceable', 'The audit log records the draft with its AI origin, and every later step'],
     ] } },
   { h3: '5.8.2 Code Development' },
+  { p: 'Figure 5.8 shows the approval check. It refuses an approval by the person who created or submitted the order, but still allows that person to reject it.' },
   { code: { caption: 'Separation of duties when an order is approved', source: 'Backend/app/services/approval_service.py', text:
 `def _decide(self, approval_id: str, user: User, comment: str | None, *, approved: bool) -> ApprovalResponse:
     approval = self._get(approval_id)
@@ -238,6 +245,7 @@ class Assertion(BaseModel):
   { p: 'A false statement by the assistant cannot become a transaction on its own: in the worst case it becomes a draft that a person reviews, with the AI\'s reasoning and any check warnings attached, and that a second person must approve. This addresses the governance gap in AI-ERP research [@hurbean2026erp] and the instability of autonomous agents [@long2026reliability].' },
 
   { h2: '5.9 Problems Met during Development and their Solutions' },
+  { p: 'Several problems appeared during development, mostly from the free API and from the model\'s behaviour. Table 5.7 lists the main ones and how each was solved.' },
   { table: { caption: 'Main development problems and solutions', widths: [3.2, 5.8],
     head: ['Problem', 'Solution'],
     rows: [

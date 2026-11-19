@@ -25,24 +25,21 @@ module.exports = [
   { p: '**RQ3: Effect and cost.** Does verification with correction change what users finally see, can it cause harm, and what does it cost in time, tokens and repeatability?' },
 
   { h2: '1.4 Project Objectives' },
+  { p: 'Five objectives were set to answer the three research questions. Objectives 1 and 2 address RQ1, objectives 3 and 4 address RQ2, and objective 5 addresses RQ3.' },
   { h3: '1.4.1 To address Research Question 1' },
   { numbered: [
-    'To build a complete ERP system (sales, inventory, procurement, suppliers, approvals, audit) with role-based access control, on a realistic dataset.',
-    'To design an AI assistant in which deterministic analytics decide what is at risk and the LLM explains through permission-checked tools, grounded in a knowledge base that is generated partly from the code so that it cannot drift from it.',
+    'To build a complete ERP decision-support system (sales, inventory, procurement, suppliers, approvals and audit) with role-based access control on a realistic dataset, in which deterministic analytics decide what is at risk and an AI assistant explains through permission-checked tools and a knowledge base generated partly from the code.',
     'To measure the effect of grounding by asking the same questions with and without the knowledge base, repeated across runs and models.',
   ] },
   { h3: '1.4.2 To address Research Question 2' },
   { numbered: [
-    'To design a typed assertion language for enterprise statements covering the database state, analytics results and company rules and permissions.',
-    'To implement TRACE, in which an LLM only extracts assertions and deterministic code decides their truth, so that every error can be attributed to extraction, language coverage or a verification function.',
-    'To evaluate TRACE on development and held-out test sets of model-written errors, frozen before the held-out test was generated, against a pattern-based checker, an LLM judge and MiniCheck, and on a labelled random sample of the assistant\'s own answers.',
-  ] },
+    'To design and implement TRACE, a typed assertion language for enterprise statements (database state, analytics results, company rules and permissions) in which an LLM only extracts assertions and deterministic code decides their truth.',
+    'To evaluate TRACE on development and held-out test sets of model-written errors and on a labelled random sample of the assistant\'s own answers, against a pattern-based checker, LLM judges and MiniCheck.',
+  ], start: 3 },
   { h3: '1.4.3 To address Research Question 3' },
   { numbered: [
-    'To measure whether verification changes how often the assistant rebuts false premises in questions, and whether it harms ordinary answers.',
-    'To measure the time, tokens and repeatability of verification, and compare them with an LLM judge.',
-    'To keep the AI\'s only action, a draft purchase order, behind validation, role permissions, separation of duties and an audit trail.',
-  ] },
+    'To measure the effect and cost of verification (false-premise questions, ordinary answers, time, tokens and repeatability) and to keep the AI\'s only action, a draft purchase order, behind validation, permissions, separation of duties and an audit trail.',
+  ], start: 5 },
 
   { h2: '1.5 Project Scope' },
   { h3: '1.5.1 Technical Implementation' },
@@ -68,6 +65,9 @@ module.exports = [
   { h2: '1.7 Research Methodology' },
   { p: 'The project follows a design-science approach [@hevner2004design]: an artefact (IntelliERP and TRACE) is built to address a practical problem, and its effect is measured with controlled experiments. Development was iterative, in nine phases, each of which was built, tested with automated tests and reviewed before the next started: (1) ERP foundation, (2) PostgreSQL persistence, (3) analytics, (4) LLM integration and tool calling, (5) enterprise grounding, (6) cross-module reasoning and proactive insights, (7) controlled actions, (8) evaluation and (9) typed run-time verification (TRACE). Results of the evaluation fed back into the design: five failures found in the first evaluation run led to five design changes, and the limits of the pattern-based checker led to TRACE. Chapter 3 describes the methodology in detail.' },
 
+  { p: 'Figure 1.1 shows the methodology as a cycle of six steps. Steps 1 to 3 define the problem and build the system; steps 4 to 6 test it, evaluate it and report the results, and what was learnt in testing and evaluation was fed back into the requirements and the design.' },
+  { fig: { file: 'fig-research-method.png', caption: 'Research methodology of the project (design science)', width: 6.3 } },
+
   { h2: '1.8 Target Audience' },
   { h3: '1.8.1 Primary' },
   { p: 'Operations staff in small and medium wholesale and retail businesses, such as inventory and procurement managers, who need fast, reliable answers that cross the sales, inventory and procurement modules.' },
@@ -77,5 +77,5 @@ module.exports = [
   { p: 'Developers and researchers building LLM assistants for enterprise software, who need a way to verify assistant output against a system of record.' },
 
   { h2: '1.9 Summary' },
-  { p: 'This chapter introduced IntelliERP and the single problem it addresses: false statements by an LLM assistant in ERP decision support. The project prevents them with evidence grounding and detects them with run-time verification that keeps the decision of truth out of the language model. Three research questions and their objectives were set. The next chapter reviews the literature on which the design is based and the gaps it fills.' },
+  { p: 'This chapter introduced IntelliERP and the single problem it addresses: false statements by an LLM assistant in ERP decision support. The project prevents them with evidence grounding and detects them with run-time verification that keeps the decision of truth out of the language model. Three research questions and five objectives were set. The next chapter reviews the literature on which the design is based and the gaps it fills.' },
 ];

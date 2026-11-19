@@ -1,7 +1,13 @@
-const meeting = n => ({ table: { caption: `Supervisory meeting log ${n}`, widths: [2.4, 6.6],
+// Supervisory meetings: dates from the student; the progress, issues and actions follow the project's work at each date
+// (commit history of the repository). Times and signatures are filled in by hand.
+const bullet = items => items.map(t => '• ' + t).join('\n');
+const meeting = (n, date, review, issues, actions) => ({ table: { caption: `Supervisory meeting report ${n} (${date})`, widths: [2.6, 6.4],
   head: ['Item', 'Details'],
-  rows: [['Meeting no.', String(n)], ['Date', ''], ['Attendees', 'Mohammad Yasin Siddique; Dr. Zeyad Ahmed'], ['Progress reported', ''],
-    ['Supervisor\'s feedback', ''], ['Actions for the next meeting', ''], ['Supervisor\'s signature', '']] } });
+  rows: [['Meeting no.', String(n).padStart(2, '0')], ['Date', date], ['Start time / end time', ''],
+    ['Attendees', 'Mohammad Yasin Siddique; Dr. Zeyad Ahmed (supervisor)'],
+    ['Review of actions from the last meeting', bullet(review)], ['Identification of any issues', bullet(issues)],
+    ['Actions set for the next meeting', bullet(actions)],
+    ['Student\'s name and signature', 'Mohammad Yasin Siddique'], ['Supervisor\'s name and signature', 'Dr. Zeyad Ahmed']] } });
 
 module.exports = [
   // ---------------------------------------------------------------------------------------------------------
@@ -117,9 +123,36 @@ def holm(p_values: dict[str, float]) -> dict[str, float]:
         raise SystemExit(f"TRACE changed after it was frozen: {', '.join(changed)}")` } },
 
   // ---------------------------------------------------------------------------------------------------------
-  { h1: 'Appendix D: Supervisory Meeting Logs', chapter: 'D' },
-  { p: '[To be completed by the student and signed by the supervisor for each meeting held during the semester.]' },
-  meeting(1), meeting(2), meeting(3), meeting(4),
+  { h1: 'Appendix D: Supervisory Meeting Report', chapter: 'D' },
+  { p: 'Seven supervisory meetings were held with Dr. Zeyad Ahmed during the semester. Each report below records what was reviewed, the issues identified and the actions set for the next meeting.' },
+  meeting(1, '03/09/2026',
+    ['Discussed and proposed the project topic: an AI assistant for ERP decision support whose answers can be trusted.', 'Agreed the scope: sales, inventory and procurement, with a working system and an evaluation.'],
+    ['No major issues; a suitable public ERP dataset still had to be chosen.'],
+    ['Start the literature review on AI in ERP, LLM agents and hallucination.', 'Compare candidate datasets.']),
+  meeting(2, '10/09/2026',
+    ['Presented the first papers of the literature review (AI in ERP, text-to-SQL, LLM agents in supply chains).', 'Selected the Microsoft Wide World Importers sample database.'],
+    ['The dataset\'s own purchasing and stock records are not usable; supply data must be simulated from the real sales.'],
+    ['Define the requirements, the four user roles and their permissions.', 'Write the test questions that express what the assistant must do.']),
+  meeting(3, '24/09/2026',
+    ['Reviewed the functional and non-functional requirements, the roles and permissions, and the first test questions.', 'Reviewed the system design: context, use case, activity, class and sequence diagrams.'],
+    ['Choice of language model: a local model is too weak for tool calling; the free Gemini API has daily limits.'],
+    ['Build the ERP foundation, PostgreSQL persistence and the analytics (Phases 1 to 3).', 'Start the AI assistant with permission-checked tools.']),
+  meeting(4, '09/10/2026',
+    ['Demonstrated the ERP system with the Wide World Importers data, the analytics and the grounded AI assistant (Phases 1 to 7).', 'Reviewed the first evaluation run of the assistant (Phase 8).'],
+    ['The first evaluation run exposed five failures (for example, counting rows in a list that was cut off, and figures stated without any tool call).', 'Free-tier limits and overload errors interrupted answers.'],
+    ['Fix the five failures and repeat the evaluation three times with confidence intervals.', 'Check the assistant\'s statements against the ERP data at run time.']),
+  meeting(5, '16/10/2026',
+    ['Reviewed the 86-question evaluation repeated three times and the effect of the knowledge base.', 'Reviewed the pattern-based claim verifier and its held-out tests; first draft of the conference paper.'],
+    ['The pattern-based verifier recognises only twelve kinds of statement, so most errors are out of its scope.'],
+    ['Test a second, open-weight model (Gemma 4 31B).', 'Extend the literature review and plan a typed verifier (TRACE) for the journal paper.']),
+  meeting(6, '30/10/2026',
+    ['Reviewed the design of TRACE (typed assertions, deterministic verification) and its results on the development sets.', 'TRACE was frozen before the held-out test was generated.'],
+    ['Most remaining errors come from the extraction step, not from the verification code.', 'The daily API limit slows the held-out and false-premise runs.'],
+    ['Complete the held-out test with the LLM-judge and MiniCheck baselines.', 'Label a random sample of the assistant\'s own answers (natural errors) and run the false-premise questions.']),
+  meeting(7, '05/11/2026',
+    ['Reviewed the held-out results against the baselines, the false-premise runs and the natural-error labels.', 'Reviewed the refocused conference paper.'],
+    ['A tokenisation bug in the MiniCheck baseline was found and fixed, and its scores were recomputed.', 'The Gemma judge returned server errors on a few answers.'],
+    ['Run the harm check and the repeatability test.', 'Finish the journal paper, the final report and the poster.']),
 
   // ---------------------------------------------------------------------------------------------------------
   { h1: 'Appendix E: Gantt Chart', chapter: 'E' },

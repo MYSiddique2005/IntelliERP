@@ -1,80 +1,54 @@
 <!doctype html><html><head><meta charset="utf-8"><style>body{margin:0;background:#fff;font-family:Arial,Helvetica,sans-serif;color:#111}
 #fig{display:inline-block;padding:18px;background:#fff}
-.box{border:1.6px solid #1f3b73;border-radius:6px;padding:8px 10px;background:#f3f6fc;font-size:13px;text-align:center}
-.title{font-weight:bold;font-size:14px;margin-bottom:4px}
-.small{font-size:11.5px;color:#333}</style>
+.box{border:2px solid #1f3b73;border-radius:8px;padding:10px 12px;background:#f3f6fc;font-size:18px;text-align:center}
+.title{font-weight:bold;font-size:20px;margin-bottom:5px}
+.small{font-size:16.5px;color:#222;line-height:1.35}
+.phase{border:2px solid var(--c);border-radius:12px;background:var(--bg);padding:12px 14px}
+.phase h3{margin:0 0 10px;font-size:22px;color:var(--c)}
+.cards{display:grid;gap:10px}
+.card{background:#fff;border:1.5px solid #c9d3e6;border-radius:8px;padding:9px 10px;text-align:center;font-size:16.5px;line-height:1.3}
+.card b{display:block;font-size:17.5px;margin-bottom:3px;color:#111}
+.down{text-align:center;font-size:30px;color:#1f3b73;line-height:1.1;margin:4px 0}
+#fig svg .relationshipLabel, #fig svg .edgeLabel, #fig svg .edgeLabel p, #fig svg .edgeLabel span{font-size:19px !important}</style>
 <script src="../node_modules/mermaid/dist/mermaid.min.js"></script>
 <script src="../node_modules/chart.js/dist/chart.umd.js"></script></head>
-<body><div id="fig"><div style="width:1250px"><pre class="mermaid">classDiagram
-  direction LR
-  class AIService{
-    +chat(message, user, history) ChatResponse
-  }
-  class Toolbox{
-    +tools_for(user) list~Tool~
-    +run(call, user) ToolResult
-  }
-  class KnowledgeBase{
-    +search(query, k) list~Match~
-  }
-  class AnalyticsService{
-    +stock_risk(product)
-    +forecast(product)
-    +supplier_performance()
-    +what_if(scenario)
-  }
-  class RecommendationChecker{
-    +check(recommendation) RecommendationChecks
-    +product_facts(id)
-    +supplier_facts(id)
-  }
-  class TraceVerifier{
-    +check(text, subject) TraceResult
-    +rule_verdicts(text)
-    +model_verdicts(assertions)
-  }
-  class Assertion{
-    family: state|derived|policy
-    attribute
-    subject
-    comparator
-    value
-  }
-  class Verdict{
-    status: supported|contradicted|unverifiable
-    quote
-    reason
-  }
-  class AIActionService{
-    +draft_from_recommendation()
-  }
-  class ProcurementService{
-    +create_draft()
-    +submit()
-  }
-  class ApprovalService{
-    +approve()
-    +reject()
-  }
-  class InsightService{
-    +run_scan(trigger)
-    +review(id, status)
-  }
-  class AuditService{
-    +record(event)
-  }
-  AIService --> Toolbox : uses
-  AIService --> KnowledgeBase : grounds with
-  AIService --> TraceVerifier : verifies answer
-  AIService --> RecommendationChecker : checks figures
-  Toolbox --> AnalyticsService : reads
-  Toolbox --> AIActionService : draft only
-  AIActionService --> ProcurementService
-  ProcurementService --> ApprovalService : second person decides
-  TraceVerifier --> Assertion : extracts
-  TraceVerifier --> Verdict : returns
-  TraceVerifier --> RecommendationChecker : facts
-  InsightService --> AIService
-  AIService --> AuditService
-  ProcurementService --> AuditService</pre></div></div><script>window.__ready=false; mermaid.initialize({startOnLoad:false, theme:'neutral', fontFamily:'Arial', flowchart:{htmlLabels:true}});
-     mermaid.run().then(()=>{window.__ready=true});</script></body></html>
+<body><div id="fig"><svg width="860" height="896" font-family="Arial"><defs><marker id="ar" markerWidth="12" markerHeight="10" refX="11" refY="5" orient="auto"><path d="M0,0 L12,5 L0,10 z" fill="#1f3b73"/></marker></defs><rect x="302" y="10" width="240" height="94" fill="#f3f6fc" stroke="#1f3b73" stroke-width="1.8"/>
+      <text x="422" y="36" text-anchor="middle" font-weight="bold" font-size="18">InsightService</text>
+      <line x1="302" y1="48" x2="542" y2="48" stroke="#1f3b73"/>
+      <text x="312" y="70" font-size="15" xml:space="preserve">+run_scan(trigger)</text><text x="312" y="93" font-size="15" xml:space="preserve">+review(id, status)</text><rect x="5" y="140" width="240" height="71" fill="#f3f6fc" stroke="#1f3b73" stroke-width="1.8"/>
+      <text x="125" y="166" text-anchor="middle" font-weight="bold" font-size="18">KnowledgeBase</text>
+      <line x1="5" y1="178" x2="245" y2="178" stroke="#1f3b73"/>
+      <text x="15" y="200" font-size="15" xml:space="preserve">+search(query, k)</text><rect x="302" y="140" width="240" height="71" fill="#f3f6fc" stroke="#1f3b73" stroke-width="1.8"/>
+      <text x="422" y="166" text-anchor="middle" font-weight="bold" font-size="18">AIService</text>
+      <line x1="302" y1="178" x2="542" y2="178" stroke="#1f3b73"/>
+      <text x="312" y="200" font-size="15" xml:space="preserve">+chat(message, user, history)</text><rect x="599" y="140" width="240" height="71" fill="#f3f6fc" stroke="#1f3b73" stroke-width="1.8"/>
+      <text x="719" y="166" text-anchor="middle" font-weight="bold" font-size="18">AuditService</text>
+      <line x1="599" y1="178" x2="839" y2="178" stroke="#1f3b73"/>
+      <text x="609" y="200" font-size="15" xml:space="preserve">+record(event)</text><rect x="5" y="290" width="240" height="94" fill="#f3f6fc" stroke="#1f3b73" stroke-width="1.8"/>
+      <text x="125" y="316" text-anchor="middle" font-weight="bold" font-size="18">Toolbox</text>
+      <line x1="5" y1="328" x2="245" y2="328" stroke="#1f3b73"/>
+      <text x="15" y="350" font-size="15" xml:space="preserve">+tools_for(user)</text><text x="15" y="373" font-size="15" xml:space="preserve">+run(call, user)</text><rect x="302" y="290" width="240" height="117" fill="#f3f6fc" stroke="#1f3b73" stroke-width="1.8"/>
+      <text x="422" y="316" text-anchor="middle" font-weight="bold" font-size="18">RecommendationChecker</text>
+      <line x1="302" y1="328" x2="542" y2="328" stroke="#1f3b73"/>
+      <text x="312" y="350" font-size="15" xml:space="preserve">+check(recommendation)</text><text x="312" y="373" font-size="15" xml:space="preserve">+product_facts(id)</text><text x="312" y="396" font-size="15" xml:space="preserve">+supplier_facts(id)</text><rect x="599" y="290" width="240" height="117" fill="#f3f6fc" stroke="#1f3b73" stroke-width="1.8"/>
+      <text x="719" y="316" text-anchor="middle" font-weight="bold" font-size="18">TraceVerifier</text>
+      <line x1="599" y1="328" x2="839" y2="328" stroke="#1f3b73"/>
+      <text x="609" y="350" font-size="15" xml:space="preserve">+check(text, subject)</text><text x="609" y="373" font-size="15" xml:space="preserve">+rule_verdicts(text)</text><text x="609" y="396" font-size="15" xml:space="preserve">+model_verdicts(assertions)</text><rect x="5" y="470" width="240" height="140" fill="#f3f6fc" stroke="#1f3b73" stroke-width="1.8"/>
+      <text x="125" y="496" text-anchor="middle" font-weight="bold" font-size="18">AnalyticsService</text>
+      <line x1="5" y1="508" x2="245" y2="508" stroke="#1f3b73"/>
+      <text x="15" y="530" font-size="15" xml:space="preserve">+stock_risk(product)</text><text x="15" y="553" font-size="15" xml:space="preserve">+forecast(product)</text><text x="15" y="576" font-size="15" xml:space="preserve">+supplier_performance()</text><text x="15" y="599" font-size="15" xml:space="preserve">+what_if(scenario)</text><rect x="302" y="470" width="240" height="71" fill="#f3f6fc" stroke="#1f3b73" stroke-width="1.8"/>
+      <text x="422" y="496" text-anchor="middle" font-weight="bold" font-size="18">AIActionService</text>
+      <line x1="302" y1="508" x2="542" y2="508" stroke="#1f3b73"/>
+      <text x="312" y="530" font-size="15" xml:space="preserve">+draft_from_recommendation()</text><rect x="599" y="470" width="240" height="117" fill="#f3f6fc" stroke="#1f3b73" stroke-width="1.8"/>
+      <text x="719" y="496" text-anchor="middle" font-weight="bold" font-size="18">Assertion</text>
+      <line x1="599" y1="508" x2="839" y2="508" stroke="#1f3b73"/>
+      <text x="609" y="530" font-size="15" xml:space="preserve">family: state | derived | policy</text><text x="609" y="553" font-size="15" xml:space="preserve">attribute, subject</text><text x="609" y="576" font-size="15" xml:space="preserve">comparator, value</text><rect x="302" y="620" width="240" height="94" fill="#f3f6fc" stroke="#1f3b73" stroke-width="1.8"/>
+      <text x="422" y="646" text-anchor="middle" font-weight="bold" font-size="18">ProcurementService</text>
+      <line x1="302" y1="658" x2="542" y2="658" stroke="#1f3b73"/>
+      <text x="312" y="680" font-size="15" xml:space="preserve">+create_draft()</text><text x="312" y="703" font-size="15" xml:space="preserve">+submit()</text><rect x="599" y="640" width="240" height="117" fill="#f3f6fc" stroke="#1f3b73" stroke-width="1.8"/>
+      <text x="719" y="666" text-anchor="middle" font-weight="bold" font-size="18">Verdict</text>
+      <line x1="599" y1="678" x2="839" y2="678" stroke="#1f3b73"/>
+      <text x="609" y="700" font-size="15" xml:space="preserve">status: supported |</text><text x="609" y="723" font-size="15" xml:space="preserve">  contradicted | unverifiable</text><text x="609" y="746" font-size="15" xml:space="preserve">quote, reason</text><rect x="302" y="790" width="240" height="94" fill="#f3f6fc" stroke="#1f3b73" stroke-width="1.8"/>
+      <text x="422" y="816" text-anchor="middle" font-weight="bold" font-size="18">ApprovalService</text>
+      <line x1="302" y1="828" x2="542" y2="828" stroke="#1f3b73"/>
+      <text x="312" y="850" font-size="15" xml:space="preserve">+approve()</text><text x="312" y="873" font-size="15" xml:space="preserve">+reject()</text><polyline points="422,104 422,140" fill="none" stroke="#1f3b73" stroke-width="1.6" marker-end="url(#ar)"/><text x="430" y="128" font-size="15" fill="#c55a11" text-anchor="start" font-style="italic">asks</text><polyline points="302,175 245,175" fill="none" stroke="#1f3b73" stroke-width="1.6" marker-end="url(#ar)"/><text x="273" y="166" font-size="15" fill="#c55a11" text-anchor="middle" font-style="italic">grounds</text><polyline points="542,175 599,175" fill="none" stroke="#1f3b73" stroke-width="1.6" marker-end="url(#ar)"/><text x="570" y="166" font-size="15" fill="#c55a11" text-anchor="middle" font-style="italic">logs</text><polyline points="332,211 125,290" fill="none" stroke="#1f3b73" stroke-width="1.6" marker-end="url(#ar)"/><text x="200" y="250" font-size="15" fill="#c55a11" text-anchor="middle" font-style="italic">uses</text><polyline points="422,211 422,290" fill="none" stroke="#1f3b73" stroke-width="1.6" marker-end="url(#ar)"/><text x="430" y="262" font-size="15" fill="#c55a11" text-anchor="start" font-style="italic">checks figures</text><polyline points="512,211 719,290" fill="none" stroke="#1f3b73" stroke-width="1.6" marker-end="url(#ar)"/><text x="660" y="250" font-size="15" fill="#c55a11" text-anchor="middle" font-style="italic">verifies</text><polyline points="599,345 542,345" fill="none" stroke="#1f3b73" stroke-width="1.6" marker-end="url(#ar)"/><text x="570" y="336" font-size="15" fill="#c55a11" text-anchor="middle" font-style="italic">facts</text><polyline points="125,384 125,470" fill="none" stroke="#1f3b73" stroke-width="1.6" marker-end="url(#ar)"/><text x="133" y="445" font-size="15" fill="#c55a11" text-anchor="start" font-style="italic">reads</text><polyline points="225,384 342,470" fill="none" stroke="#1f3b73" stroke-width="1.6" marker-end="url(#ar)"/><text x="282" y="455" font-size="15" fill="#c55a11" text-anchor="end" font-style="italic">draft only</text><polyline points="719,407 719,470" fill="none" stroke="#1f3b73" stroke-width="1.6" marker-end="url(#ar)"/><text x="727" y="455" font-size="15" fill="#c55a11" text-anchor="start" font-style="italic">extracts</text><polyline points="839,330 848,330 848,700 839,700" fill="none" stroke="#1f3b73" stroke-width="1.6" marker-end="url(#ar)"/><text x="840" y="620" font-size="15" fill="#c55a11" text-anchor="end" font-style="italic">returns</text><polyline points="422,541 422,620" fill="none" stroke="#1f3b73" stroke-width="1.6" marker-end="url(#ar)"/><text x="430" y="600" font-size="15" fill="#c55a11" text-anchor="start" font-style="italic">creates draft</text><polyline points="422,714 422,790" fill="none" stroke="#1f3b73" stroke-width="1.6" marker-end="url(#ar)"/><text x="430" y="775" font-size="15" fill="#c55a11" text-anchor="start" font-style="italic">second person decides</text><polyline points="542,670 570,670 570,236 629,236 629,211" fill="none" stroke="#1f3b73" stroke-width="1.6" marker-end="url(#ar)"/><text x="574" y="660" font-size="15" fill="#c55a11" text-anchor="start" font-style="italic">logs</text></svg></div><script></script></body></html>

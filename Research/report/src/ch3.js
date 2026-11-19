@@ -58,6 +58,7 @@ module.exports = [
 
   { h2: '3.3 System Requirements' },
   { h3: '3.3.1 Functional requirements' },
+  { p: 'Functional requirements state what the system must do. Each requirement in Table 3.4 is traced to the evidence of Section 3.2 that it comes from: the literature gaps, the dataset, the role analysis or the test questions. The requirement IDs are used again in the use case descriptions (Table 3.6) and in Chapter 4, where each interface lists the requirements it meets.' },
   { table: { caption: 'Functional requirements', widths: [0.8, 3, 4.2],
     head: ['ID', 'Requirement', 'Evidence it comes from'],
     rows: [
@@ -74,6 +75,7 @@ module.exports = [
       ['FR11', 'Every question, AI draft and workflow step is recorded in an audit log', '@hurbean2026erp (governance)'],
     ] } },
   { h3: '3.3.2 Non-functional requirements' },
+  { p: 'Non-functional requirements state how well the system must do its work: how correct, explainable, secure, private, maintainable, reliable, testable and fast it must be. Table 3.5 lists the eight non-functional requirements together with the design decision that meets each one.' },
   { table: { caption: 'Non-functional requirements', widths: [0.8, 3, 4.2],
     head: ['ID', 'Requirement', 'How it is met'],
     rows: [
@@ -93,7 +95,8 @@ module.exports = [
   { fig: { file: 'fig-context.png', caption: 'Rich picture of IntelliERP and its context', width: 6.3 } },
   { h3: '3.4.2 Use case diagram' },
   { p: 'Figure 3.3 shows the main use cases. All roles can log in and view records within their permissions. Inventory and procurement managers and administrators can use the analytics, the AI assistant and the AI insights. Only procurement managers and administrators can create, submit and approve purchase orders, and only administrators can view the audit log. The LLM provider is a secondary actor used by the assistant, the insights and AI drafting.' },
-  { fig: { file: 'fig-usecase.png', caption: 'Use case diagram', width: 5.6 } },
+  { fig: { file: 'fig-usecase.png', caption: 'Use case diagram', width: 6.3 } },
+  { p: 'Table 3.6 describes each use case of Figure 3.3: which actors take part and what happens, with a reference to the functional requirement that the use case fulfils.' },
   { table: { caption: 'Use case descriptions', widths: [2.6, 1.8, 4.6],
     head: ['Use case', 'Actors', 'Description'],
     rows: [
@@ -109,10 +112,10 @@ module.exports = [
     ] } },
   { h3: '3.4.3 Activity diagram' },
   { p: 'Figure 3.4 shows the central activity of the system: answering a question. Knowledge passages are retrieved first, the model may call only permitted tools, and the draft answer is verified before it is shown. A contradicted answer is sent back once; anything still contradicted is shown with a warning, so the user always knows which statements did not agree with the data.' },
-  { fig: { file: 'fig-activity.png', caption: 'Activity diagram: answering a question with verification', width: 4.6 } },
+  { fig: { file: 'fig-activity.png', caption: 'Activity diagram: answering a question with verification', width: 6.3 } },
   { h3: '3.4.4 Class diagram' },
   { p: 'Figure 3.5 shows the main classes of the back end. `AIService` orchestrates a conversation. It uses the `Toolbox` to run permitted tools over the `AnalyticsService`, the `KnowledgeBase` to ground the model, and the `TraceVerifier` and `RecommendationChecker` to verify the answer. The only path from the AI to a change in the data goes through `AIActionService`, which can only ask `ProcurementService` for a draft; approval belongs to `ApprovalService` and a different user.' },
-  { fig: { file: 'fig-class.png', caption: 'Class diagram of the main back-end components', width: 6.4 } },
+  { fig: { file: 'fig-class.png', caption: 'Class diagram of the main back-end components', width: 6.3 } },
   { h3: '3.4.5 Sequence diagram' },
   { p: 'Figure 3.6 shows one question from end to end, including a tool call, TRACE verification and a correction round.' },
   { fig: { file: 'fig-sequence.png', caption: 'Sequence diagram: a verified answer', width: 6.3 } },

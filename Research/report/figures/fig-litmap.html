@@ -1,0 +1,33 @@
+<!doctype html><html><head><meta charset="utf-8"><style>body{margin:0;background:#fff;font-family:Arial,Helvetica,sans-serif;color:#111}
+#fig{display:inline-block;padding:18px;background:#fff}
+.box{border:2px solid #1f3b73;border-radius:8px;padding:10px 12px;background:#f3f6fc;font-size:18px;text-align:center}
+.title{font-weight:bold;font-size:20px;margin-bottom:5px}
+.small{font-size:16.5px;color:#222;line-height:1.35}
+.phase{border:2px solid var(--c);border-radius:12px;background:var(--bg);padding:12px 14px}
+.phase h3{margin:0 0 10px;font-size:22px;color:var(--c)}
+.cards{display:grid;gap:10px}
+.card{background:#fff;border:1.5px solid #c9d3e6;border-radius:8px;padding:9px 10px;text-align:center;font-size:16.5px;line-height:1.3}
+.card b{display:block;font-size:17.5px;margin-bottom:3px;color:#111}
+.down{text-align:center;font-size:30px;color:#1f3b73;line-height:1.1;margin:4px 0}
+#fig svg .relationshipLabel, #fig svg .edgeLabel, #fig svg .edgeLabel p, #fig svg .edgeLabel span{font-size:19px !important}</style>
+<script src="../node_modules/mermaid/dist/mermaid.min.js"></script>
+<script src="../node_modules/chart.js/dist/chart.umd.js"></script></head>
+<body><div id="fig"><div style="width:780px">
+<div class="phase" style="--c:#1f3b73;--bg:#f3f6fc"><h3>Six research areas reviewed</h3>
+ <div class="cards" style="grid-template-columns:1fr 1fr 1fr">
+  <div class="card"><b>AI in ERP</b>2.1</div><div class="card"><b>LLMs over enterprise data</b>2.2</div><div class="card"><b>Agents in supply chain and ERP</b>2.3</div>
+  <div class="card"><b>Grounding and tool use</b>2.4</div><div class="card"><b>Hallucination detection</b>2.5</div><div class="card"><b>Claim verification and run-time checking</b>2.6–2.8</div>
+ </div></div>
+<div class="down">⬇</div>
+<div class="phase" style="--c:#c55a11;--bg:#fff6ee"><h3>Four research gaps (2.10)</h3>
+ <div class="cards" style="grid-template-columns:1fr 1fr">
+  <div class="card"><b>Gap 1</b>Statements are not verified against the system of record</div><div class="card"><b>Gap 2</b>Verdicts depend on another model</div>
+  <div class="card"><b>Gap 3</b>Business rules and permissions are not checked</div><div class="card"><b>Gap 4</b>Natural errors and end-to-end effect rarely measured</div>
+ </div></div>
+<div class="down">⬇</div>
+<div class="phase" style="--c:#548235;--bg:#eef6ea"><h3>How IntelliERP answers them</h3>
+ <div class="cards" style="grid-template-columns:1fr 1fr">
+  <div class="card"><b>Grounding</b>Data only through permission-checked tools; company rules from a knowledge base built from the code</div>
+  <div class="card"><b>TRACE</b>Every statement becomes a typed assertion, decided by the system's own code (state, derived results, rules and permissions)</div>
+ </div></div>
+</div></div><script></script></body></html>

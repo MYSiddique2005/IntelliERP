@@ -92,7 +92,9 @@ function runs(text, base = {}) {
   if (last < text.length) out.push(new TextRun({ text: text.slice(last), font: FONT, ...base }));
   return out;
 }
-const para = (text, opts = {}) => new Paragraph({ children: runs(text, opts.run || {}), alignment: opts.align || AlignmentType.JUSTIFIED,
+// Justified text is stretched badly around long unbreakable code names (test names, file paths), so such paragraphs are left-aligned.
+const longCode = text => /`[^`]{28,}`/.test(text);
+const para = (text, opts = {}) => new Paragraph({ children: runs(text, opts.run || {}), alignment: opts.align || (longCode(text) ? AlignmentType.LEFT : AlignmentType.JUSTIFIED),
   spacing: { after: 160, line: 360, ...(opts.spacing || {}) }, ...(opts.extra || {}) });
 
 // ------------------------------------------------------------------ images
@@ -127,10 +129,13 @@ function table({ head, rows, widths }) {
   const total = widths.reduce((a, b) => a + b, 0);
   const w = widths.map(x => Math.round(x / total * TEXT_WIDTH));
   w[w.length - 1] = TEXT_WIDTH - w.slice(0, -1).reduce((a, b) => a + b, 0);
+  const small = rows.length <= 6 && rows.flat().join('').length < 500;
   return new Table({ width: { size: TEXT_WIDTH, type: WidthType.DXA }, columnWidths: w,
     rows: [new TableRow({ tableHeader: true, children: head.map((h, i) => cell(h, { header: true, width: w[i] })) }),
       // short tables are kept on one page (keep-with-next on every row but the last); long ones repeat their header
-      ...rows.map((r, k) => new TableRow({ cantSplit: true, children: r.map((c, i) => cell(c, { width: w[i], keep: rows.length <= 14 && k < rows.length - 1 })) }))] });
+      // only short tables are kept on one page; longer ones may continue on the next page (with their header repeated)
+      // rather than leaving a large empty space at the bottom of the page
+      ...rows.map((r, k) => new TableRow({ cantSplit: true, children: r.map((c, i) => cell(c, { width: w[i], keep: small && k < rows.length - 1 })) }))] });
 }
 const BULLET = 'bullets', NUMBERED = 'numbered';
 let numberedInstance = 0;
@@ -148,7 +153,7 @@ function render(block) {
   if (block.center) return [para(block.center, { align: AlignmentType.CENTER })];
   if (block.bullets) return block.bullets.map(b => new Paragraph({ numbering: { reference: BULLET, level: 0 }, alignment: AlignmentType.JUSTIFIED,
     spacing: { after: 80, line: 340 }, children: runs(b) }));
-  if (block.numbered) { numberedInstance++; return block.numbered.map(b => new Paragraph({ numbering: { reference: NUMBERED, level: 0, instance: numberedInstance },
+  if (block.numbered) { numberedInstance++; return block.numbered.map(b => new Paragraph({ numbering: { reference: block.start ? `${NUMBERED}-s${block.start}` : NUMBERED, level: 0, instance: numberedInstance },
     alignment: AlignmentType.JUSTIFIED, spacing: { after: 80, line: 340 }, children: runs(b) })); }
   if (block.table) { tabNo++; return [caption('Table', block.table.caption, 'TableCaption'), table(block.table), new Paragraph({ spacing: { after: 120 }, children: [] })]; }
   if (block.fig) { figNo++; return [new Paragraph({ alignment: AlignmentType.CENTER, keepNext: true, spacing: { before: 120, after: 40 },
@@ -248,6 +253,7 @@ const headerFooter = {
 
 const doc = new Document({
   creator: META.student, title: META.title, features: { updateFields: true },
+  hyphenation: { autoHyphenation: true, consecutiveHyphenLimit: 2 },  // fewer wide gaps in justified lines
   styles: {
     default: { document: { run: { font: FONT, size: 24 } } },
     paragraphStyles: [
@@ -265,6 +271,8 @@ const doc = new Document({
   numbering: { config: [
     { reference: BULLET, levels: [{ level: 0, format: LevelFormat.BULLET, text: '•', alignment: AlignmentType.LEFT, style: { paragraph: { indent: { left: 720, hanging: 360 } } } }] },
     { reference: NUMBERED, levels: [{ level: 0, format: LevelFormat.DECIMAL, text: '%1.', alignment: AlignmentType.LEFT, style: { paragraph: { indent: { left: 720, hanging: 360 } } } }] },
+    // lists that continue the numbering of an earlier list (block.start), e.g. objectives 3-4 and 5
+    ...[2, 3, 4, 5, 6, 7, 8, 9].map(n => ({ reference: `${NUMBERED}-s${n}`, levels: [{ level: 0, format: LevelFormat.DECIMAL, start: n, text: '%1.', alignment: AlignmentType.LEFT, style: { paragraph: { indent: { left: 720, hanging: 360 } } } }] })),
   ] },
   sections: [
     { properties: { page: { margin: { top: 1440, bottom: 1440, left: 1440, right: 1440 } } }, children: cover() },

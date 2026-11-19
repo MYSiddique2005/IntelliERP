@@ -3,6 +3,9 @@ module.exports = [
   { h2: '2.0 Introduction' },
   { p: 'This chapter reviews more than sixty published works in six areas that bear on the project\'s problem: AI in ERP systems; LLMs over enterprise data; LLM agents in supply chain and ERP; grounding and tool use; hallucination and its detection; and the verification of claims against data. Every paper was checked against the publisher, arXiv or the conference proceedings. The chapter ends with a critical comparison of existing approaches, the research gaps that IntelliERP addresses and a literature review matrix.' },
 
+  { p: 'Figure 2.1 shows how the review is organised: the six research areas, the four gaps they leave open, and how IntelliERP answers each gap.' },
+  { fig: { file: 'fig-litmap.png', caption: 'Organisation of the literature review', width: 6.2 } },
+
   { h2: '2.1 AI in ERP Systems' },
   { p: 'A systematic review of 183 academic and 35 industry documents found that research on AI in ERP grows by 11.3% a year and is dominated by automation (41% of studies), while ethics and governance appear in under 2% of studies and 93% stress benefits [@hurbean2026erp]. A review of LLMs in supply chain management similarly describes the field as fragmented and exploratory, without a unified framework for deployment [@song2026scm]. Both reviews point to the same weakness: trust and control receive far less attention than capability.' },
 
@@ -41,14 +44,14 @@ module.exports = [
   { p: 'Explanations made people accept AI recommendations more often whether they were right or wrong [@bansal2021whole], while explanations that make checking easier reduced over-reliance [@vasconcelos2023overreliance]; this motivates showing users which statements were checked against the data. Design guidelines ask that a system make clear why it did what it did [@amershi2019guidelines]. Abstention, declining to answer when the data cannot support an answer, is an open problem [@wen2025abstention], and questions built on false premises are a known weakness of LLMs [@hu2023falseqa], which motivates the false-premise experiment. InsightBench evaluates agents that generate business insights [@sahu2025insightbench], and ProactiveBench studies when an agent should offer help [@lu2025proactive].' },
 
   { h2: '2.9 Critical Analysis of Existing Systems' },
-  { p: 'The reviewed work falls into four categories, compared in Table 2.1.' },
+  { p: 'The reviewed work falls into four categories. Read-only question-answering systems give users natural-language access to enterprise data; autonomous agents go further and act on the data; general hallucination detectors check text against evidence; and claim-verification systems check statements against databases. Table 2.1 compares each category with IntelliERP: what it does well, which published systems represent it, and what it still lacks for an ERP assistant.' },
   { table: { caption: 'Comparison of existing approaches with IntelliERP', widths: [2.2, 2.2, 2.3, 2.3],
     head: ['Category', 'Examples', 'Strength', 'What is missing'],
     rows: [
-      ['Read-only enterprise question answering', 'Chatting with your ERP; text-to-SQL agents', 'Natural-language access to data', 'Answers are not verified; SQL generation is error-prone; no actions'],
-      ['Autonomous ERP and supply-chain agents', 'Agentic ERP, InvAgent, Beer Game agents', 'Can act and optimise', 'Hallucination not measured; explanations unchecked; unstable across runs'],
-      ['Hallucination detectors', 'SelfCheckGPT, MiniCheck, LLM judges, SAFE', 'General, work on any text', 'No business-rule semantics; verdict made by a model; not inside the product'],
-      ['Claim verification over databases', 'AggChecker, CEDAR, Thucy', 'Checks claims against data', 'Offline documents; depends on model-written SQL; no rules or permissions'],
+      ['Read-only enterprise question answering', 'Chatting with your ERP [@ruizgomez2025erp]; text-to-SQL agents [@lei2025spider2; @li2023bird]', 'Natural-language access to data', 'Answers are not verified; SQL generation is error-prone; no actions'],
+      ['Autonomous ERP and supply-chain agents', 'Agentic ERP [@liu2026agenticerp]; InvAgent [@quan2024invagent]; Beer Game agents [@long2026reliability]', 'Can act and optimise', 'Hallucination not measured; explanations unchecked; unstable across runs'],
+      ['Hallucination detectors', 'SelfCheckGPT [@manakul2023selfcheckgpt]; MiniCheck [@tang2024minicheck]; LLM judges [@gu2024judge]; SAFE [@wei2024longform]', 'General, work on any text', 'No business-rule semantics; verdict made by a model; not inside the product'],
+      ['Claim verification over databases', 'AggChecker [@jo2019aggchecker]; CEDAR [@jayasekara2025cedar]; Thucy [@theologitis2025thucy]', 'Checks claims against data', 'Offline documents; depends on model-written SQL; no rules or permissions'],
       ['IntelliERP (this project)', 'Grounded assistant + TRACE', 'Checks every statement against the system\'s own code before the user sees it; draft-only actions', 'Coverage of definitions; extraction errors (measured in Chapter 6)'],
     ] } },
 
@@ -63,6 +66,7 @@ module.exports = [
   { p: 'Most detectors are evaluated on injected or benchmark errors; few measure the errors a deployed assistant actually makes, or whether verification changes what the user finally sees.' },
 
   { h2: '2.11 Literature Review Matrix' },
+  { p: 'Table 2.2 summarises the works closest to this project. For each work it gives the focus, the method or technology used, and the limitation that IntelliERP addresses.' },
   { table: { caption: 'Literature review matrix', widths: [2, 2.4, 2, 2.6],
     head: ['Reference', 'Focus / contribution', 'Method / technology', 'Limitation addressed by IntelliERP'],
     rows: [
