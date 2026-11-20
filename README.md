@@ -191,7 +191,7 @@ persistent data; without it, set `DATA_BACKEND=memory`.
 <summary><b>📁 Show the folder structure</b></summary>
 
 ```
-Major_Project/
+IntelliERP/
 ├── Backend/
 │   ├── app/
 │   │   ├── main.py            FastAPI app, CORS, error handling
@@ -226,6 +226,13 @@ Request flow: `React page → service (Axios) → FastAPI route → service → 
 </details>
 
 ## Running it
+
+### 0. Get the code
+
+```bash
+git clone https://github.com/MYSiddique2005/IntelliERP.git
+cd IntelliERP
+```
 
 ### 1. Database
 

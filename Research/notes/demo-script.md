@@ -7,9 +7,9 @@ about 1280x800 and zoom to 110% so text is readable.
 ## Before recording
 
 ```bash
-cd ~/Major_Project/Backend && ./scripts/dev_db.sh start
+cd ~/IntelliERP/Backend && ./scripts/dev_db.sh start
 source .venv/bin/activate && uvicorn app.main:app --reload        # terminal 1
-cd ~/Major_Project/Frontend && npm run dev                       # terminal 2
+cd ~/IntelliERP/Frontend && npm run dev                       # terminal 2
 ```
 
 Open http://localhost:5173. The assistant needs the Gemini key in `Backend/.env`; ask each question once

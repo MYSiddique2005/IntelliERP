@@ -19,7 +19,7 @@ const NAME = 'Mohammad Yasin Naeemuddin Siddique';  // as on the presentation li
 const logo = fs.existsSync(path.join(__dirname, 'inti-logo.png'))
   ? `<img class="logo" src="file://${path.join(__dirname, 'inti-logo.png')}" alt="INTI International University">`
   : `<div class="uni">${fs.existsSync(path.join(__dirname, 'inti-mark.png')) ? `<img class="mark" src="file://${path.join(__dirname, 'inti-mark.png')}" alt="">` : ''}<b>INTI</b><span>International<br>University</span></div>`;
-const REPO = 'github.com/MYSiddique2005/Major_Project';
+const REPO = 'github.com/MYSiddique2005/IntelliERP';
 const qr = fs.existsSync(path.join(__dirname, 'qr-github.svg')) ? fs.readFileSync(path.join(__dirname, 'qr-github.svg'), 'utf8') : '';
 const img = name => `file://${path.join(ASSETS, name)}`;
 // A screenshot cropped to the region (x, y, w, h) of its 1440 x 900 image, scaled to the column width.
