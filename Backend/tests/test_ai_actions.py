@@ -105,6 +105,7 @@ def test_reorder_insight_becomes_a_draft_and_is_linked_to_it(client, auth, llm):
     order = response.json()
     assert order["status"] == "Draft" and order["origin"] == "AI Insight" and order["origin_ref"] == insight["id"]
     assert order["product_id"] == insight["subject_id"] and order["quantity"] == insight["quantity"]
+    assert order["ai_recommendation"]["model"] == "test-model"  # the model of the scan that wrote the insight
     assert order["ai_recommendation"]["checks"]["quantity_matches_rule"] is (risk["suggested_order_quantity"] > 0)
 
     linked = next(i for i in client.get(f"{API}/ai/insights", headers=auth("admin")).json() if i["id"] == insight["id"])

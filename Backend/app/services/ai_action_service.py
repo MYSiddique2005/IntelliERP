@@ -17,7 +17,7 @@ from app.core.exceptions import BusinessRuleError, NotFoundError, PermissionDeni
 from app.llm.recommendations import Recommendation, RecommendationChecker, RecommendationError, RecommendationInput
 from app.models.entities import User
 from app.models.enums import InsightStatus, PurchaseOrderOrigin
-from app.repositories.base import AiInsightRepository, UnitOfWork
+from app.repositories.base import AiInsightRepository, AiScanRepository, UnitOfWork
 from app.schemas.procurement import PurchaseOrderCreate, PurchaseOrderResponse
 from app.security.permissions import Permission, has_permission
 from app.services.procurement_service import ProcurementService
@@ -31,11 +31,13 @@ class AIActionService:
         procurement: ProcurementService,
         checker: RecommendationChecker,
         insights: AiInsightRepository,
+        scans: AiScanRepository,
         uow: UnitOfWork,
     ):
         self._procurement = procurement
         self._checker = checker
         self._insights = insights
+        self._scans = scans
         self._uow = uow
 
     def draft_from_proposal(
@@ -65,7 +67,9 @@ class AIActionService:
             recommendation = self._checker.check(RecommendationInput.model_validate(insight.model_dump()))
         except RecommendationError as error:
             raise BusinessRuleError(str(error)) from error
-        scan_model = None
+        # The draft records the model that wrote the insight, which is the model of the scan that recorded it.
+        scan = self._scans.get(insight.scan_id)
+        scan_model = scan.model if scan else None
         order = self._draft(recommendation, user, PurchaseOrderOrigin.AI_INSIGHT, insight.id, scan_model)
 
         insight.purchase_order_id = order.id

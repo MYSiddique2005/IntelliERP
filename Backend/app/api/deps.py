@@ -258,9 +258,10 @@ def get_ai_action_service(
     suppliers: SupplierService = Depends(get_supplier_service),
     procurement: ProcurementService = Depends(get_procurement_service),
     insights: AiInsightRepository = Depends(get_ai_insight_repository),
+    scans: AiScanRepository = Depends(get_ai_scan_repository),
     uow: UnitOfWork = Depends(get_unit_of_work),
 ) -> AIActionService:
-    return AIActionService(procurement, RecommendationChecker(analytics, suppliers, knowledge), insights, uow)
+    return AIActionService(procurement, RecommendationChecker(analytics, suppliers, knowledge), insights, scans, uow)
 
 
 def get_ai_service(
