@@ -45,6 +45,8 @@ export interface ChatResponse {
   unverified_figures: string[]
   /** Statements in the answer that the system's data contradicts, even after one correction. */
   contradicted_claims: string[]
+  /** How the answer's statements were checked: verifier, statements checked, extraction. */
+  verification: Record<string, unknown> | null
   provider: string | null
   model: string | null
   usage: Record<string, number> | null
