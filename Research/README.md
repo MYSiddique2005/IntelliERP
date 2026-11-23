@@ -6,7 +6,7 @@ working notes. The results they report come from `LLM/evaluation/results/`.
 | Folder | What it is | Main file |
 |---|---|---|
 | [`journal/`](journal/) | Journal article (IEEE journal format): TRACE and its full evaluation. **Submit this first.** | `trace.tex`, `references.bib` |
-| [`paper/`](paper/) | Conference paper (IEEE conference format): the system, grounding and the pattern-based verifier. The backup if the journal does not accept. | `intellierp.tex`, `references.bib`, `intellierp.pdf` |
+| [`paper/`](paper/) | Conference paper (IEEE conference format): the system, grounding and the pattern-based verifier. The backup if the journal does not accept. | `intellierp.tex`, `references.bib` |
 | [`report/`](report/) | Final-year project report for INTI (Word), built from JavaScript sources | `src/*.js` (one file per chapter), `build.js` |
 | [`poster/`](poster/) | A1 poster for the project presentation | `build.js` |
 | [`notes/`](notes/) | Working notes: literature review, research plan, annotation guide, reviewer questions, demo script | see below |
