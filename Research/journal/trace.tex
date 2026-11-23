@@ -9,10 +9,9 @@
 \usepackage{tikz}
 \usetikzlibrary{arrows.meta,positioning}
 \usepackage[hidelinks]{hyperref}
-\newcommand{\pending}[1]{\textcolor{red}{[#1]}}
 % Run-in italic paragraph headings (IEEEtran would letter them as a), b), ...).
 \renewcommand{\paragraph}[1]{\par\textit{#1}\enspace}
-% Results still running (Gemma judge; MiniCheck on natural answers); replaced when complete.
+% Table rows and paragraphs for the Gemma judge, MiniCheck and the Gemma false-premise run (all complete).
 \newcommand{\HELDOUTBASELINES}{LLM judge (gemma-4-31b-it) & 76/102 (75\%; 65--82) & 38/50 & 38/52 & 7/103 (7\%; 3--13) \\
 MiniCheck & 38/102 (37\%; 28--47) & 20/50 & 18/52 & 22/103 (21\%; 15--30) \\}
 \newcommand{\HELDOUTMINIGEMMA}{\paragraph{Comparison with MiniCheck.} MiniCheck detected 38 of the 102 errors (37\%), significantly fewer than
