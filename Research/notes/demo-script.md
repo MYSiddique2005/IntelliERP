@@ -26,7 +26,7 @@ before recording so you know the free tier is answering (it can take up to a min
 | 5 | 2:30 | procurement | Click *Create draft purchase order*, then open Procurement | "The only thing the AI can create is a draft. It passes the same validation as any order and records that it came from the AI." |
 | 6 | 3:00 | procurement | Try to approve your own submitted order | "A different user must approve it: separation of duties." |
 | 7 | 3:30 | `employee` / `employee123` | AI page is not available; ask nothing | "Roles limit what each user, and the AI acting for them, can see." |
-| 8 | 4:00 | — | Settings page (version 1.0), then the poster's held-out chart | "Grounding cut false statements in the assistant's own answers from 25.9% to 2.4%. On 102 errors written after it was frozen, TRACE detected 69% with false alarms on 4% of correct texts; every miss could be traced to its cause. 272 automated tests pass." |
+| 8 | 4:00 | — | Settings page (version 1.0), then the poster's held-out chart | "Grounding cut false statements in the assistant's own answers from 25.9% to 2.4%. On 102 errors written after it was frozen, TRACE detected 69% with false alarms on 4% of correct texts; every miss could be traced to its cause. 295 automated tests pass." |
 
 ## If something goes wrong
 

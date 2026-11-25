@@ -157,7 +157,7 @@ module.exports = ({ logo, qr, META, NAME, crop, heldoutChart, NAVY, ORANGE, INK,
       <b>before the user sees it</b>.</p></div>
       <div class="a"><h3>3 · Human control</h3><p>The AI can only <b>draft</b> a purchase order; a different person must approve it.</p></div>
       <p class="cap">ERP for sales, inventory and procurement on Wide World Importers data (227 products, 72,696 sales lines),
-      built with React, FastAPI, PostgreSQL and Gemini/Gemma; 272 automated tests pass.</p>
+      built with React, FastAPI, PostgreSQL and Gemini/Gemma; 295 automated tests pass.</p>
     </div></section>
 
   </div>
@@ -230,14 +230,14 @@ module.exports = ({ logo, qr, META, NAME, crop, heldoutChart, NAVY, ORANGE, INK,
 
     <section><h2>TRACE vs Other Checkers <small>held-out test</small></h2><div class="body">
       ${heldoutChart()}
-      <div class="honest"><b>Honest limit:</b> on the AI's own mistakes TRACE found only <b>4 of 19</b>; most were wrong
-      definitions its language cannot express yet.</div>
+      <div class="honest"><b>Honest limit:</b> on the AI's own mistakes TRACE found only <b>4 of 19</b> (most were
+      wrong definitions); a <b>concept checker</b> added later raised this to <b>17 of 19</b> (development result).</div>
     </div></section>
 
     <section class="grow"><h2>Conclusion</h2><div class="body">
       <p class="concl">Facts in an AI answer should be decided by the system that owns them, not by the model.</p>
       <p class="note" style="font-size:27px">Grounding prevented most errors; TRACE made the rest visible and explainable.
-      Next: a user study, a wider language for definitions, warnings instead of automatic correction.</p>
+      Next: a user study, testing the concept checker, warnings instead of automatic correction.</p>
       <p class="ack"><b>Acknowledgement:</b> ${META.supervisor} (INTI International University); ${META.homeSupervisor} and
       ${META.homeHod}, Head of CSE, G H Raisoni College of Engineering, Nagpur; research internship under the mobility programme.</p>
     </div></section>
