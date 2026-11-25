@@ -48,6 +48,12 @@ class Settings(BaseSettings):
     #   trace      TRACE, hybrid: rules plus one model call that extracts typed assertions
     #   off        no statement check (only to measure what checking contributes)
     llm_verifier: Literal["patterns", "trace-rule", "trace", "off"] = "patterns"
+    # Statements about what the system's terms mean ("overdue units are part of the units on order") are checked
+    # by app/llm/semantics, in addition to llm_verifier and without changing it:
+    #   off     no check (default)
+    #   rules   pattern extraction only; no model call
+    #   model   patterns plus one model call that extracts concept statements
+    llm_semantics: Literal["off", "rules", "model"] = "off"
     # Proactive scan: the assistant analyses the current high and critical findings on its own.
     insight_scan_interval_minutes: int = 1440  # 0 switches the scheduled scan off; it can still be run by hand
     insight_max_findings: int = 6  # findings analysed per scan, most severe first

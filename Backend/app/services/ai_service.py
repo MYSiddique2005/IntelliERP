@@ -10,6 +10,7 @@ from app.core.config import Settings
 from app.knowledge.base import KnowledgeBase, Match
 from app.llm.providers import KEY_NAMES, Provider, ToolCall, ToolResult, Turn
 from app.llm.recommendations import answer_claims, untraced_figures
+from app.llm.semantics import SemanticVerifier
 from app.llm.tools import PROPOSE_TOOL, Toolbox, ToolError
 from app.llm.trace import TraceResult, TraceVerifier
 from app.models.entities import User
@@ -173,7 +174,29 @@ class AIService:
                     verification_usage["output_tokens"] += extraction.output_tokens
             return checked[answer]
 
+        semantics = self._settings.llm_semantics
+        meanings: dict[str, list] = {}  # concept verdicts per answer text, reused when the answer is reported
+        meaning_usage = {"input_tokens": 0, "output_tokens": 0}
+
+        def meaning_verdicts(answer: str) -> list:
+            if semantics == "off":
+                return []
+            if answer not in meanings:
+                checker = SemanticVerifier(self._toolbox.fact_source(self._settings.separation_of_duties),
+                                           self._provider if semantics == "model" else None, user.role)
+                meanings[answer] = checker.verdicts(answer)
+                if checker.extraction is not None:
+                    meaning_usage["input_tokens"] += checker.extraction.input_tokens
+                    meaning_usage["output_tokens"] += checker.extraction.output_tokens
+            return meanings[answer]
+
+        def meaning_contradictions(answer: str) -> list[str]:
+            return list(dict.fromkeys(v.describe() for v in meaning_verdicts(answer) if v.status == "contradicted"))
+
         def contradicted() -> list[str]:
+            return statements_contradicted() + meaning_contradictions(text)
+
+        def statements_contradicted() -> list[str]:
             if verifier == "off":
                 return []
             if verifier == "patterns":
@@ -195,6 +218,9 @@ class AIService:
                         "assertions": len(result.extraction.assertions), "invalid": result.extraction.invalid,
                     }
                 info["tokens"] = dict(verification_usage)
+            if semantics != "off":
+                info["semantics"] = {"mode": semantics, "claims_checked": len(meaning_verdicts(text)),
+                                     "tokens": dict(meaning_usage)}
             return info
 
         corrected = False

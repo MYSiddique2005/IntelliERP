@@ -43,7 +43,7 @@
 |---|---|---|
 | 🛡️ Grounding | **25.9% → 2.4%** false statements | in the assistant's own answers, without → with the knowledge base |
 | ✅ Paired questions | **8–9 → 32 of 32** correct | without → with grounding (p < 0.0001), on every repeated run |
-| 🔍 TRACE, unseen errors | **69%** detected, **4%** false alarms | held-out test of 102 errors and 103 correct paraphrases, written after TRACE was frozen |
+| 🔍 TRACE, planted errors | **69%** detected, **4%** false alarms | held-out test of 102 model-written (planted) errors and 103 correct paraphrases, written after TRACE was frozen; the judges detected slightly more, TRACE raised fewer false alarms |
 | ⚖️ Against LLM judges | not significantly different in detection | Gemini judge 78% with **17%** false alarms (p = 0.036); Gemma judge 75% with 7% |
 | 🧾 Explainability | **0** failures from a verification function | every miss and false alarm was traced to extraction or to the language's coverage |
 | ⚠️ Honest limit | **4 of 19** natural errors found | most of the assistant's own errors were wrong definitions, outside TRACE's language |
@@ -703,6 +703,27 @@ verdict and label is in `LLM/evaluation/results/trace/`.
 - **Repeatability** (`repeat-extraction.md`, `repeat-judge.md`): given an extraction, verdicts are identical
   (420 of 420). Two extractions of the same 50 texts led to the same flag decision for 47 and the same
   flagged statements for 41; the Gemini judge asked twice: 47 and 34; the Gemma judge asked twice: 49 and 49.
+
+### Meaning errors: the concept checker (after Phase 9, development result)
+
+Most of the assistant's real errors misstated a *meaning*, not a figure ("overdue units are part of the units on
+order", "reorder level and reorder point are the same"), which TRACE's language cannot say. `Backend/app/llm/semantics/`
+adds a separate checker (TRACE itself is unchanged and still matches its frozen hashes, tag `trace-v1-frozen`):
+each such statement is a yes/no claim about a named **concept**, and the concept's truth is read by *running the
+system's own code on a fixture* (8 concepts; two are declared in the knowledge base because code cannot show them).
+Setting `LLM_SEMANTICS=rules` (no model call) or `model` (patterns plus one extraction call) switches it on; default `off`.
+
+| On the 19 real errors of the random sample | Found |
+|---|---:|
+| TRACE-hybrid (published) | 4 of 19 |
+| Concept checker alone | 14 of 19 |
+| TRACE-hybrid + concept checker | 17 of 19 |
+
+**Read this as a development result, not as 74%.** The patterns were written after reading these same sentences,
+so the figure shows what the language can now express, not how it will do on new answers. On the 7 flags it raised in
+sentences nobody had labelled, all were genuine instances of the same errors, and the two false alarms found that way were
+fixed. A held-out check needs a fresh sample of answers written after the patterns were frozen
+(`evaluation/semantics_eval.py` reproduces the table offline; 23 tests in `tests/test_semantics.py`).
 
 ### Running the TRACE evaluation
 

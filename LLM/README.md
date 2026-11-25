@@ -231,3 +231,17 @@ Read these with their limits in mind:
 - **Simulated supply data.** Purchase orders and stock levels are simulated (see `Data/README.md`).
 - **The figure check is a lookup.** It cannot tell a derived figure from an invented one, or a real figure
   used in the wrong place.
+
+## Concept checker (after Phase 9)
+
+`evaluation/semantics_eval.py` scores the concept checker (`Backend/app/llm/semantics`) on the 686 labelled
+natural-error sentences, offline and without a model: `../Backend/.venv/bin/python -m evaluation.semantics_eval`,
+output in `results/trace/natural/semantics-report.md`. On the 19 false sentences of the random sample it finds 14
+(TRACE-hybrid found 4; together 17), with no wrong flag among the labelled sentences.
+
+Limits that matter: the patterns were written after reading these sentences, so this is a *development* result and
+says nothing yet about new answers; the model-extraction mode (`LLM_SEMANTICS=model`) has been tested only with a
+scripted model. Of the five sentences it misses, three are ones TRACE already finds (a suggested quantity of 40,
+and two "below the reorder level of 92"); two are meaning errors no pattern covers yet (which purchase-order statuses
+count as incoming stock, and "inbound units prevent High or Critical risk"). The next step is a fresh set of answers, written
+after the patterns are frozen, labelled blind.
