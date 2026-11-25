@@ -111,11 +111,11 @@ module.exports = ({ logo, qr, META, NAME, crop, heldoutChart, NAVY, ORANGE, INK,
   .hero p { font-size: 25px; margin-top: 8px; line-height: 1.28; }
   svg .lg { font-size: 30px; fill: ${INK}; } svg .ax { font-size: 26px; fill: ${MUTED}; }
   svg .nm { font-size: 31px; fill: ${INK}; } svg .nm.b { font-weight: 800; } svg .vl { font-size: 29px; font-weight: 700; fill: ${INK}; }
-  .note { font-size: 26px; color: var(--muted); line-height: 1.32; margin-top: 8px; }
-  .honest { border: 4px dashed var(--orange); border-radius: 16px; padding: 14px 22px; background: #FFF6EE; margin-top: 16px;
-            font-size: 28px; line-height: 1.3; }
-  .concl { font-size: 31px; font-weight: 700; color: var(--navy); line-height: 1.3; }
-  .ack { font-size: 25px; line-height: 1.32; color: var(--muted); margin-top: 12px; }
+  .note { font-size: 26px; color: var(--muted); line-height: 1.32; margin-top: 4px; }
+  .honest { border: 4px dashed var(--orange); border-radius: 16px; padding: 10px 20px; background: #FFF6EE; margin-top: 12px;
+            font-size: 26px; line-height: 1.28; }
+  .concl { font-size: 29px; font-weight: 700; color: var(--navy); line-height: 1.25; }
+  .ack { font-size: 24px; line-height: 1.28; color: var(--muted); margin-top: 12px; }
 </style></head><body>
 <header>
   <div>${logo}</div>
@@ -157,7 +157,7 @@ module.exports = ({ logo, qr, META, NAME, crop, heldoutChart, NAVY, ORANGE, INK,
       <b>before the user sees it</b>.</p></div>
       <div class="a"><h3>3 · Human control</h3><p>The AI can only <b>draft</b> a purchase order; a different person must approve it.</p></div>
       <p class="cap">ERP for sales, inventory and procurement on Wide World Importers data (227 products, 72,696 sales lines),
-      built with React, FastAPI, PostgreSQL and Gemini/Gemma; 295 automated tests pass.</p>
+      built with React, FastAPI, PostgreSQL and Gemini/Gemma; 295 automated tests are successful.</p>
     </div></section>
 
   </div>
@@ -230,14 +230,14 @@ module.exports = ({ logo, qr, META, NAME, crop, heldoutChart, NAVY, ORANGE, INK,
 
     <section><h2>TRACE vs Other Checkers <small>held-out test</small></h2><div class="body">
       ${heldoutChart()}
-      <div class="honest"><b>Honest limit:</b> on the AI's own mistakes TRACE found only <b>4 of 19</b> (most were
-      wrong definitions); a <b>concept checker</b> added later raised this to <b>17 of 19</b> (development result).</div>
+      <div class="honest"><b>AI honesty:</b> TRACE only identified <b>4 of 19</b> of the AI’s errors (predominantly incorrect
+      definitions). Post-evaluation a <b>concept checker</b> was implemented and increased this to <b>17 of 19</b> (development output).</div>
     </div></section>
 
     <section class="grow"><h2>Conclusion</h2><div class="body">
       <p class="concl">Facts in an AI answer should be decided by the system that owns them, not by the model.</p>
-      <p class="note" style="font-size:27px">Grounding prevented most errors; TRACE made the rest visible and explainable.
-      Next: a user study, testing the concept checker, warnings instead of automatic correction.</p>
+      <p class="note" style="font-size:24px">Grounding prevented most errors; TRACE made the rest visible and explainable.
+      Following this, a user study will be conducted. The concept checker will be validated and manual alerts will be used in preference to auto-correction.</p>
       <p class="ack"><b>Acknowledgement:</b> ${META.supervisor} (INTI International University); ${META.homeSupervisor} and
       ${META.homeHod}, Head of CSE, G H Raisoni College of Engineering, Nagpur; research internship under the mobility programme.</p>
     </div></section>
